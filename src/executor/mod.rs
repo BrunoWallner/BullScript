@@ -21,7 +21,7 @@ impl Executor {
     }
 
     pub fn execute(
-        &mut self,
+        &self,
         entry: &str,
         arguments: Vec<&dyn IntoValue>,
     ) -> Result<Option<Value>, ExecutionError> {

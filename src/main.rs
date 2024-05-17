@@ -10,14 +10,14 @@ fn main() {
     let ast = match parser::parse(tokens) {
         Ok(e) => Ast::new(e),
         Err(e) => {
-            println!("{}", e.format_with(&input, "parse error"));
+            println!("{}", e.format_with(&input, "parse error", true));
             process::exit(1);
         }
     };
-    let mut executor = match Executor::build(ast) {
+    let executor = match Executor::build(ast) {
         Ok(e) => e,
         Err(e) => {
-            println!("at build: {}", e.format_with(&input, "build error"));
+            println!("at build: {}", e.format_with(&input, "build error", true));
             process::exit(1);
         }
     };
@@ -26,7 +26,7 @@ fn main() {
     let result = executor.execute("main", vec![&["hello", "world"]]);
     match result {
         Ok(r) => println!("result: {:?}", r),
-        Err(e) => println!("{}", e.format_with(&input, "execution error")),
+        Err(e) => println!("{}", e.format_with(&input, "execution error", true)),
     }
     println!("execution took: {:?}", time.elapsed());
 }

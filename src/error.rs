@@ -40,7 +40,9 @@ impl ExecutionError {
         Self { at, cause }
     }
 
-    pub fn format_with(&self, input: &str, title: &str) -> String {
+    pub fn format_with(&self, input: &str, title: &str, color: bool) -> String {
+        colored::control::set_override(color);
+
         let underscore_width = 5;
         let (line, start_offset) = get_line_at_index(input, self.at);
         let line_number = get_line_number(input, self.at);
@@ -79,7 +81,9 @@ impl ParseError {
         Self { at, depth, cause }
     }
 
-    pub fn format_with(&self, input: &str, title: &str) -> String {
+    pub fn format_with(&self, input: &str, title: &str, color: bool) -> String {
+        colored::control::set_override(color);
+
         let underscore_width = 5;
         let (line, start_offset) = get_line_at_index(input, self.at);
         let line_number = get_line_number(input, self.at);
