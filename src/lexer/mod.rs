@@ -8,7 +8,7 @@ use nom::{
     branch::alt,
     bytes::complete::{tag, take_while1},
     character::complete::{alphanumeric1, char, digit1},
-    combinator::{map, recognize},
+    combinator::{map, opt, recognize},
     multi::{many0, many1},
     sequence::{pair, preceded, terminated},
     IResult,
@@ -165,7 +165,15 @@ fn string_literal(input: &str) -> IResult<&str, Token> {
 }
 
 fn float_literal(input: &str) -> IResult<&str, Token> {
-    let (input, num_str) = recognize(pair(digit1, pair(char('.'), digit1)))(input)?;
+    // let (input, num_str) = recognize(
+    //     pair(digit1, pair(char('.'), digit1))
+    // )(input)?;
+    let (input, num_str) = recognize(
+        pair(
+            opt(char('-')),
+            pair(digit1, pair(char('.'), digit1))
+        )
+    )(input)?;
     // let num = num_str.parse::<f64>().unwrap();
     let data = num_str
         .parse::<f64>()
@@ -175,8 +183,9 @@ fn float_literal(input: &str) -> IResult<&str, Token> {
 }
 
 fn int_literal(input: &str) -> IResult<&str, Token> {
-    let (input, num_str) = recognize(digit1)(input)?;
-    // let num = num_str.parse::<f64>().unwrap();
+    let (input, num_str) = recognize(
+        pair(opt(tag("-")), digit1)
+    )(input)?;
     let data = num_str
         .parse::<i64>()
         .ok()
